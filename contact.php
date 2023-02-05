@@ -11,9 +11,7 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 require 'vendor/autoload.php';
-/* require 'path/to/PHPMailer/src/Exception.php';
-require 'path/to/PHPMailer/src/PHPMailer.php';
-require 'path/to/PHPMailer/src/SMTP.php'; */
+
 
 if(!empty($body)){
     $name = $body['name'];
@@ -22,47 +20,38 @@ if(!empty($body)){
     $message = $body['message'];
 }
 
-$email_admin = "pedromedina@axolotlsystemscompany.com"; //email del administrador del correo
-$pass_admin = "RedRobin97"; //contraseña del correo administrador
-$name_admin = "Pedro Medina"; //nombre del administrador del correo
+$email_admin = "pedromedina@axolotlsystemscompany.com"; //email de la landing page ejemplo: info@correo.com
+$pass_admin = "RedRobin97"; //contraseña del email
+$name_admin = "Pedro Medina"; //nombre del usuario del email
 
 $mail = new PHPMailer(true);
 
 
 try {
     //Server settings
-    $mail->SMTPDebug = 0;                      //Enable verbose debug output
-    $mail->isSMTP();                                            //Send using SMTP
-    $mail->Host       = 'smtp.titan.email';                     //Set the SMTP server to send through
-    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-    $mail->Username   = $email_admin;                     //SMTP username
-    $mail->Password   = $pass_admin;                               //SMTP password
-    $mail->SMTPSecure = 'ssl';            //Enable implicit TLS encryption
-    $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+    $mail->SMTPDebug = 0;                      //DEBUG 0 es deshabilitado - 1 es para habilitarlo
+    $mail->isSMTP();                                            //SMTP
+    $mail->Host       = 'smtp.titan.email';                     //definir servidor SMTP
+    $mail->SMTPAuth   = true;                                   //Habilitar la autentificación SMTP
+    $mail->Username   = $email_admin;                     //SMTP Usuario
+    $mail->Password   = $pass_admin;                               //SMTP Password
+    $mail->SMTPSecure = 'ssl';            //si se usa SSL añadirlo como un string 
+    $mail->Port       = 465;                                    //puerto TCP
 
-    //Recipients
-    $mail->setFrom($email, $name);
-    $mail->addAddress($email_admin, $name);
-/*     $mail->addAddress('joe@example.net', 'Joe User');     //Add a recipient
-    $mail->addAddress('ellen@example.com');               //Name is optional
-    $mail->addReplyTo('info@example.com', 'Information');
-    $mail->addCC('cc@example.com');
-    $mail->addBCC('bcc@example.com'); */
+    //EMAIL
+    $mail->setFrom($email_admin, $name); //email de la landing page
+    $mail->addAddress($email_admin, $name); //direccion(es) a donde se enviarán los correos
 
-    //Attachments
-    /* $mail->addAttachment('/var/tmp/file.tar.gz');         
-    $mail->addAttachment('/tmp/image.jpg', 'new.jpg');     */
 
     //Content
-    $mail->isHTML(true);                                  //Set email format to HTML
+    $mail->isHTML(true);                                  //Envia el correo en formato HMTL
     $mail->Subject = $subject;
-    $mail->Body    = $message;
-/*     $mail->AltBody = 'This is the body in plain text for non-HTML mail clients'; */
+    $mail->Body    ="Contactar a: ".$name."<br>"."Acerca de: ".$subject."<br>"."Correo: ".$email . "<br>".$message;
 
     $mail->send();
-    echo 'Message has been sent';
+    echo 'Mensaje Enviado';
 } catch (Exception $e) {
-    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    echo "No se pudo enviar el mensaje. Mailer Error: {$mail->ErrorInfo}";
 }
 
 

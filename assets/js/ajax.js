@@ -1,5 +1,4 @@
 $(document).ready(function () {
-  console.log("ajax cargado");
   $("#formulario").submit(function (e) {
     e.preventDefault();
     let name = $("input[name=name]").val();
@@ -23,26 +22,26 @@ $(document).ready(function () {
         "Content-Type": "application/json",
       },
       data: form,
-      success: function (response) {
-        console.log(response);
+      error: function (response) {
         showLoading();
-        Swal.fire({
-          icon: "success",
-          title: "Mensaje Enviado Correctamente",
-          showConfirmButton: false,
-          timer: 1500,
-        }).then(function () {
-          //location.href = "http://localhost/rrasesorias/";
-        });
-      },
-      //timeout: 2000,
-      error: function () {
-        Swal.fire({
-          icon: "error",
-          title: "Error al insertar fila",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        if(response.status == 200){
+          Swal.fire({
+            icon: "success",
+            title: "Mensaje Enviado",
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(function () {
+            location.href = "http://localhost/rrasesorias/";
+          });
+        }else{
+          Swal.fire({
+            icon: "warning",
+            title: "Error de envio de datos",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+        
       },
     });
     return false;
@@ -58,6 +57,7 @@ $(document).ready(function () {
       },
     });
   }
+
 });
 
 
