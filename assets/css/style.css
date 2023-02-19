@@ -3,6 +3,19 @@ body {
   color: #272829;
 }
 
+@font-face {
+  font-family: "icon-local";
+  src: url("../img/oil.svg")format('svg');
+  
+}
+
+.icon-local{
+  font-style: normal;
+  font-weight: normal;
+}
+
+
+
 a {
   color: #149ddd;
   text-decoration: none;

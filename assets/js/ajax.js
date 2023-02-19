@@ -1,4 +1,9 @@
 $(document).ready(function () {
+  //local
+  let url = "http://localhost/rrasesorias"; 
+  //server
+  //let url = "www.rrasesorias.com";
+
   $("#formulario").submit(function (e) {
     e.preventDefault();
     let name = $("input[name=name]").val();
@@ -16,32 +21,34 @@ $(document).ready(function () {
     showLoading();
     $.ajax({
       type: "POST",
-      url: "http://localhost/rrasesorias/contact.php",
+      url: url+"/contact.php",
       headers: {
         "X-Requested-With": "XMLHttpRequest",
         "Content-Type": "application/json",
       },
       data: form,
-      error: function (response) {
+      
+      success:function (response) {
         showLoading();
-        if(response.status == 200){
+        if(response[0] == "ok"){
           Swal.fire({
             icon: "success",
-            title: "Mensaje Enviado",
+            title: response[1],
+            text: response[2],
             showConfirmButton: false,
             timer: 1500,
           }).then(function () {
-            location.href = "http://localhost/rrasesorias/";
+            //location.href = url;
           });
-        }else{
+        }else{  
           Swal.fire({
-            icon: "warning",
-            title: "Error de envio de datos",
+            icon: "error",
+            title: response[1],
+            text: response[2],
             showConfirmButton: false,
             timer: 1500,
-          });
+          })
         }
-        
       },
     });
     return false;

@@ -20,9 +20,9 @@ if(!empty($body)){
     $message = $body['message'];
 }
 
-$email_admin = "pedromedina@axolotlsystemscompany.com"; //email de la landing page ejemplo: info@correo.com
-$pass_admin = "RedRobin97"; //contraseña del email
-$name_admin = "Pedro Medina"; //nombre del usuario del email
+$email_admin = ""; //email de la landing page ejemplo: info@correo.com
+$pass_admin = ""; //contraseña del email
+$name_admin = ""; //nombre del usuario del email
 
 $mail = new PHPMailer(true);
 
@@ -31,12 +31,12 @@ try {
     //Server settings
     $mail->SMTPDebug = 0;                      //DEBUG 0 es deshabilitado - 1 es para habilitarlo
     $mail->isSMTP();                                            //SMTP
-    $mail->Host       = 'smtp.titan.email';                     //definir servidor SMTP
+    $mail->Host       = '';                     //definir servidor SMTP
     $mail->SMTPAuth   = true;                                   //Habilitar la autentificación SMTP
     $mail->Username   = $email_admin;                     //SMTP Usuario
     $mail->Password   = $pass_admin;                               //SMTP Password
-    $mail->SMTPSecure = 'ssl';            //si se usa SSL añadirlo como un string 
-    $mail->Port       = 465;                                    //puerto TCP
+    //$mail->SMTPSecure = 'ssl';            //si se usa SSL añadirlo como un string 
+    $mail->Port       = 26;                                    //puerto TCP
 
     //EMAIL
     $mail->setFrom($email_admin, $name); //email de la landing page
@@ -49,9 +49,21 @@ try {
     $mail->Body    ="Contactar a: ".$name."<br>"."Acerca de: ".$subject."<br>"."Correo: ".$email . "<br>".$message;
 
     $mail->send();
-    echo 'Mensaje Enviado';
+    $response = [
+        $status = "ok",
+        $title = "Mensaje enviado correctamente",
+        $msg = "En breve le contactaremos"
+    ];
+    
+    echo json_encode($response); 
 } catch (Exception $e) {
-    echo "No se pudo enviar el mensaje. Mailer Error: {$mail->ErrorInfo}";
+    $response = [
+        $status = "error",
+        $title = "Error al enviar",
+        $msg = "Verifique todos los campos del formulario"
+    ];
+    echo json_encode($response.$mail->ErrorInfo);
+    /* echo "No se pudo enviar el mensaje. Mailer Error: {$mail->ErrorInfo}"; */
 }
 
 
